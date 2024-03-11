@@ -64,6 +64,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
             _hasReachedMax = true;
           } else {
             final currentState = state as NewsLoaded;
+            print((currentState.news + newsList).length);
             emit(NewsLoaded(currentState.news + newsList));
           }
         } catch (error) {
