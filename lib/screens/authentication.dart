@@ -1,16 +1,23 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:newsbyte/bloc/auth_bloc.dart';
+import 'package:newsbyte/bloc/theme/theme.dart';
+import 'package:newsbyte/bloc/theme/theme_bloc.dart';
 import 'package:newsbyte/constants.dart';
 import 'package:newsbyte/main.dart';
 import 'package:newsbyte/screens/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sup;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
+  static String routeName = "/login";
+
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -26,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
       final session = data.session;
       if (session != null) {
+        print("Auth Init");
         BlocProvider.of<AuthBloc>(context)
             .add(AuthUserAuthenicated(email: session.user.email!));
       }
@@ -65,12 +73,8 @@ class _LoginPageState extends State<LoginPage> {
           }
 
           if (state is AuthSuccess) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-                (route) => false);
+            Navigator.pushNamedAndRemoveUntil(
+                context, HomeScreen.routeName, (route) => false);
           }
         },
         builder: (context, state) {
@@ -96,28 +100,13 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 40,
                   ),
-                  SignInButton(
-                    Buttons.google,
-                    onPressed: () {},
-                  ),
-                  Platform.isIOS
-                      ? SignInButton(
-                          Buttons.apple,
-                          onPressed: () {},
-                        )
-                      : Container(),
-                  const SizedBox(
-                    height: 40,
-                  ),
                   TextField(
                     controller: _emailController,
-                    cursorColor: Colors.black,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(0.0),
                       labelText: 'Email',
                       hintText: 'Email',
                       labelStyle: const TextStyle(
-                        color: Colors.black,
                         fontSize: 14.0,
                         fontWeight: FontWeight.w400,
                       ),
@@ -127,7 +116,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       prefixIcon: const Icon(
                         Iconsax.user,
-                        color: Colors.black,
                         size: 18,
                       ),
                       enabledBorder: OutlineInputBorder(
@@ -136,7 +124,6 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       floatingLabelStyle: const TextStyle(
-                        color: Colors.black,
                         fontSize: 18.0,
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -153,21 +140,42 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       BlocProvider.of<AuthBloc>(context).add(AuthLoginRequested(
                         email: _emailController.text.trim(),
-                        loginType: LoginType.email.toString(),
+                        loginType: email.toString(),
                       ));
                     },
+                    color: state == darkMode ? Colors.white : Colors.black,
                     height: 45,
-                    color: Colors.black,
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Get Login Link.",
-                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color:
+                              state == darkMode ? Colors.black : Colors.white),
                     ),
                   ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  SignInButton(
+                    Buttons.google,
+                    onPressed: () {
+                      BlocProvider.of<AuthBloc>(context).add(AuthLoginRequested(
+                        email: "",
+                        loginType: google.toString(),
+                      ));
+                    },
+                  ),
+                  Platform.isIOS
+                      ? SignInButton(
+                          Buttons.apple,
+                          onPressed: () {},
+                        )
+                      : Container(),
                   const SizedBox(
                     height: 30,
                   ),

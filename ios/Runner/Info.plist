@@ -48,8 +48,15 @@
 		<string>Editor</string>
 		<key>CFBundleURLSchemes</key>
 		<array>
-		    <string>com.googleusercontent.apps.newsbyte</string>
 			<string>io.supabase.newsbyte</string>
+		</array>
+		</dict>
+		<dict>
+		<key>CFBundleTypeRole</key>
+		<string>Editor</string>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		    <string>com.googleusercontent.apps.874657036644-por56qnecd5pju4s5vg4mi68t87n0s59</string>
 		</array>
 		</dict>
 	</array>

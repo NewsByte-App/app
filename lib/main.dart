@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsbyte/bloc/auth_bloc.dart';
+import 'package:newsbyte/bloc/theme/theme_bloc.dart';
+import 'package:newsbyte/bloc/theme/theme_event.dart';
+import 'package:newsbyte/screens/article_screen.dart';
 import 'package:newsbyte/screens/authentication.dart';
+import 'package:newsbyte/screens/feed_screen.dart';
+import 'package:newsbyte/screens/home_screen.dart';
 import 'package:newsbyte/screens/home_screen.dart';
 import 'package:newsbyte/screens/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,20 +30,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          fontFamily: GoogleFonts.playfairDisplay().fontFamily,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const SplashScreen(),
-          '/login': (context) => const LoginPage(),
-          '/home': (context) => const HomeScreen()
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(
+            create: (context) => ThemeBloc()
+              ..add(
+                SetInitialTheme(),
+              )),
+      ],
+      child: BlocBuilder<ThemeBloc, ThemeData>(
+        builder: (context, themState) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: themState,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const SplashScreen(),
+              '/login': (context) => const LoginPage(),
+              HomeScreen.routeName: (context) => const HomeScreen(),
+              FeedScreen.routeName: (context) => const FeedScreen()
+            },
+          );
         },
       ),
     );
