@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsbyte/bloc/auth_bloc.dart';
+import 'package:newsbyte/bloc/news/news_bloc.dart';
 import 'package:newsbyte/bloc/theme/theme_bloc.dart';
 import 'package:newsbyte/bloc/theme/theme_event.dart';
 import 'package:newsbyte/screens/article_screen.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
               ..add(
                 SetInitialTheme(),
               )),
+        BlocProvider(create: (context) => NewsBloc()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeData>(
         builder: (context, themState) {

@@ -58,16 +58,12 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       if (!_hasReachedMax && state is NewsLoaded) {
         _currentPage++;
         try {
-          print("HERE");
           final newsList = await apiRepository.fetchNewsList(
               page: _currentPage, category: event.category);
-          print(newsList);
           if (newsList == null || newsList.isEmpty) {
             _hasReachedMax = true;
           } else {
-            print("HERE2");
             final currentState = state as NewsLoaded;
-            print((currentState.news + newsList).length);
             emit(NewsLoaded(currentState.news + newsList));
           }
         } catch (error) {

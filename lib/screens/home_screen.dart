@@ -16,32 +16,13 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
-  late final NewsBloc _newsBloc;
+class _HomeScreenState extends State<HomeScreen> {
   late final List<String> tabs;
+  final NewsBloc _newsBloc = NewsBloc();
 
   @override
   void initState() {
     super.initState();
-    tabs = NewsCategories.values.map((e) => e.name).toList();
-    _newsBloc = NewsBloc();
-    _tabController = TabController(vsync: this, length: tabs.length);
-    _tabController.addListener(_onTabChanged);
-    _newsBloc.add(GetNewsByCategory(tabs[0]));
-  }
-
-  void _onTabChanged() {
-    if (!_tabController.indexIsChanging) {
-      _newsBloc.add(GetNewsByCategory(tabs[_tabController.index]));
-    }
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
   }
 
   @override
@@ -73,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen>
             const _DiscoverNews(),
             _CategoryNews(
               tabs: tabs,
-              tabController: _tabController,
             )
           ],
         ),
@@ -86,25 +66,36 @@ class _CategoryNews extends StatefulWidget {
   const _CategoryNews({
     Key? key,
     required this.tabs,
-    required this.tabController,
   }) : super(key: key);
 
   final List<String> tabs;
-  final TabController tabController;
 
   @override
   State<_CategoryNews> createState() => _CategoryNewsState();
 }
 
-class _CategoryNewsState extends State<_CategoryNews> {
+class _CategoryNewsState extends State<_CategoryNews>
+    with SingleTickerProviderStateMixin {
   final Map<int, ScrollController> _scrollControllers = {};
+  late final TabController _tabController;
+  late final List<String> tabs;
 
   @override
   void initState() {
     for (int i = 0; i < widget.tabs.length; i++) {
       _scrollControllers[i] = ScrollController();
     }
+    tabs = NewsCategories.values.map((e) => e.name).toList();
+    _tabController = TabController(vsync: this, length: tabs.length);
+    _tabController.addListener(_onTabChanged);
     super.initState();
+  }
+
+  void _onTabChanged() {
+    if (mounted & !_tabController.indexIsChanging) {
+      BlocProvider.of<NewsBloc>(context)
+          .add(GetNewsByCategory(tabs[_tabController.index]));
+    }
   }
 
   bool _isBottom(ScrollController controller) {
@@ -127,7 +118,7 @@ class _CategoryNewsState extends State<_CategoryNews> {
     return Expanded(
       child: Column(children: [
         TabBar(
-          controller: widget.tabController,
+          controller: _tabController,
           isScrollable: true,
           tabs: widget.tabs
               .map(
@@ -145,8 +136,8 @@ class _CategoryNewsState extends State<_CategoryNews> {
         ),
         Expanded(
           child: TabBarView(
-              controller: widget.tabController,
-              children: widget.tabs.asMap().entries.map((entry) {
+              controller: _tabController,
+              children: tabs.asMap().entries.map((entry) {
                 int tabIndex = entry.key;
                 String tab = entry.value;
                 ScrollController scrollController = ScrollController();
@@ -162,7 +153,7 @@ class _CategoryNewsState extends State<_CategoryNews> {
                       controller: scrollController
                         ..addListener(() {
                           if (!mounted) return;
-                          if (widget.tabController.index == tabIndex &&
+                          if (_tabController.index == tabIndex &&
                               _isBottom(scrollController)) {
                             context
                                 .read<NewsBloc>()
@@ -238,79 +229,6 @@ class _CategoryNewsState extends State<_CategoryNews> {
                     return Container();
                   }
                 });
-                // ListView.builder(
-                //   controller: _scrollController
-                //     ..addListener(() {
-                //       if (widget.tabController.index == tabIndex &&
-                //           _isBottom(_scrollController)) {
-                //         context
-                //             .read<NewsBloc>()
-                //             .add(FetchMoreNewsByCategory(tab));
-                //       }
-                //     }),
-                //   shrinkWrap: true,
-                //   itemCount: state.news.length,
-                //   itemBuilder: ((context, index) {
-                //     return InkWell(
-                //       onTap: () {
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => ArticleScreen(
-                //               news: state.news[index],
-                //               scrollablePhysics: true,
-                //             ),
-                //           ),
-                //         );
-                //       },
-                //       child: Row(
-                //         children: [
-                //           ImageContainer(
-                //             width: 80,
-                //             height: 80,
-                //             margin: const EdgeInsets.all(10.0),
-                //             borderRadius: 5,
-                //             imageUrl: state.news[index].image_url,
-                //           ),
-                //           Expanded(
-                //             child: Column(
-                //               crossAxisAlignment: CrossAxisAlignment.start,
-                //               mainAxisAlignment: MainAxisAlignment.center,
-                //               children: [
-                //                 Text(
-                //                   state.news[index].title,
-                //                   maxLines: 2,
-                //                   overflow: TextOverflow.clip,
-                //                   style: Theme.of(context)
-                //                       .textTheme
-                //                       .bodyLarge!
-                //                       .copyWith(
-                //                         fontWeight: FontWeight.bold,
-                //                       ),
-                //                 ),
-                //                 const SizedBox(height: 10),
-                //                 Row(
-                //                   children: [
-                //                     const Icon(
-                //                       Icons.schedule,
-                //                       size: 18,
-                //                     ),
-                //                     const SizedBox(width: 5),
-                //                     Text(
-                //                       '${DateTime.now().difference(DateTime.parse(state.news[index].published_date)).inHours} hours ago',
-                //                       style: const TextStyle(fontSize: 12),
-                //                     ),
-                //                     const SizedBox(width: 20),
-                //                   ],
-                //                 ),
-                //               ],
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     );
-                //   }),
-                // );
               }).toList()),
         ),
       ]),
@@ -343,28 +261,6 @@ class _DiscoverNews extends StatelessWidget {
             'Quick Reads, Big Stories',
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          // TextFormField(
-          //   decoration: InputDecoration(
-          //     hintText: 'Search',
-          //     fillColor: Colors.grey.shade200,
-          //     filled: true,
-          //     prefixIcon: const Icon(
-          //       Icons.search,
-          //       color: Colors.grey,
-          //     ),
-          //     suffixIcon: const RotatedBox(
-          //       quarterTurns: 1,
-          //       child: Icon(
-          //         Icons.tune,
-          //         color: Colors.grey,
-          //       ),
-          //     ),
-          //     border: OutlineInputBorder(
-          //       borderRadius: BorderRadius.circular(20.0),
-          //       borderSide: BorderSide.none,
-          //     ),
-          //   ),
-          // )
         ],
       ),
     );
