@@ -18,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final List<String> tabs;
-  final NewsBloc _newsBloc = NewsBloc();
 
   @override
   void initState() {
@@ -30,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     List<String> tabs = NewsCategories.values.map((e) => e.name).toList();
 
     return BlocProvider(
-      create: (context) => _newsBloc,
+      create: (context) => NewsBloc(),
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         drawer: const NavDrawer(),
@@ -76,48 +75,37 @@ class _CategoryNews extends StatefulWidget {
 
 class _CategoryNewsState extends State<_CategoryNews>
     with SingleTickerProviderStateMixin {
-  final Map<int, ScrollController> _scrollControllers = {};
-  final Map<int, VoidCallback> _scrollListeners = {};
+  late final Map<int, ScrollController> _scrollControllers;
   late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    _scrollControllers = {};
     _tabController = TabController(vsync: this, length: widget.tabs.length);
-    _tabController.addListener(_handleTabSelection);
+    _tabController.addListener(_onTabChanged);
 
     for (int i = 0; i < widget.tabs.length; i++) {
       var scrollController = ScrollController();
-      VoidCallback scrollListener = () => _onScroll(scrollController, i);
-      scrollController.addListener(scrollListener);
+      scrollController.addListener(() => _onScroll(scrollController, i));
       _scrollControllers[i] = scrollController;
-      _scrollListeners[i] = scrollListener;
     }
+
+    BlocProvider.of<NewsBloc>(context).add(GetNewsByCategory(widget.tabs[0]));
   }
 
-  void _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
-      return;
+  void _onTabChanged() {
+    if (_tabController.indexIsChanging || !_tabController.indexIsChanging) {
+      BlocProvider.of<NewsBloc>(context).add(ResetCurrentPage());
+      BlocProvider.of<NewsBloc>(context)
+          .add(GetNewsByCategory(widget.tabs[_tabController.index]));
     }
-
-    // Remove listener from the previous tab's ScrollController
-    _scrollControllers[_tabController.previousIndex]!
-        .removeListener(_scrollListeners[_tabController.previousIndex]!);
-    // Add listener to the new tab's ScrollController
-    _scrollControllers[_tabController.index]!
-        .addListener(_scrollListeners[_tabController.index]!);
-
-    // When tab changes, trigger fetching news for the newly active category.
-    BlocProvider.of<NewsBloc>(context)
-        .add(GetNewsByCategory(widget.tabs[_tabController.index]));
   }
 
   void _onScroll(ScrollController controller, int tabIndex) {
-    if (_isBottom(controller)) {
-      if (_tabController.index == tabIndex) {
-        BlocProvider.of<NewsBloc>(context)
-            .add(FetchMoreNewsByCategory(widget.tabs[_tabController.index]));
-      }
+    if (_isBottom(controller) && _tabController.index == tabIndex) {
+      BlocProvider.of<NewsBloc>(context)
+          .add(FetchMoreNewsByCategory(widget.tabs[_tabController.index]));
     }
   }
 
@@ -125,17 +113,13 @@ class _CategoryNewsState extends State<_CategoryNews>
     if (!controller.hasClients) return false;
     final maxScroll = controller.position.maxScrollExtent;
     final currentScroll = controller.offset;
-    // Use a slightly less than 1.0 factor (e.g., 0.95) to ensure fetching happens before hitting the bottom.
     return currentScroll >= (maxScroll * 0.95);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    for (int i = 0; i < widget.tabs.length; i++) {
-      _scrollControllers[i]!.removeListener(_scrollListeners[i]!);
-      _scrollControllers[i]!.dispose();
-    }
+    _scrollControllers.forEach((_, controller) => controller.dispose());
     super.dispose();
   }
 
@@ -165,7 +149,6 @@ class _CategoryNewsState extends State<_CategoryNews>
               controller: _tabController,
               children: widget.tabs.asMap().entries.map((entry) {
                 int tabIndex = entry.key;
-                String tab = entry.value;
                 ScrollController scrollController =
                     _scrollControllers[tabIndex]!;
                 return BlocBuilder<NewsBloc, NewsState>(

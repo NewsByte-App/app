@@ -62,37 +62,39 @@ class _NewsBody extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Row(
-            children: [
-              CustomTag(
-                backgroundColor: Theme.of(context).cardColor,
-                children: [
-                  const SizedBox(width: 10),
-                  Text(
-                    "ABCD",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10),
-              CustomTag(
-                backgroundColor: Theme.of(context).cardColor,
-                children: [
-                  const Icon(
-                    Icons.timer,
-                    color: Colors.grey,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    '${DateTime.now().difference(DateTime.parse(article.published_date)).inHours}h',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10),
-            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CustomTag(
+                  backgroundColor: Theme.of(context).cardColor,
+                  children: [
+                    const SizedBox(width: 10),
+                    Text(
+                      article.author,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 10),
+                CustomTag(
+                  backgroundColor: Theme.of(context).cardColor,
+                  children: [
+                    const Icon(
+                      Icons.timer,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      '${DateTime.now().difference(DateTime.parse(article.published_date)).inHours}h',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 10),
+              ],
+            ),
           ),
           const SizedBox(height: 20),
           Center(
@@ -124,7 +126,7 @@ class _NewsHeadline extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.20,
+            height: MediaQuery.of(context).size.height * 0.15,
           ),
           CustomTag(
             backgroundColor: Colors.grey.withAlpha(150),
@@ -141,7 +143,7 @@ class _NewsHeadline extends StatelessWidget {
           Text(
             article.title,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                   color: Colors.white,
                   height: 1.25,
                 ),
@@ -149,10 +151,10 @@ class _NewsHeadline extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             article.description,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: Colors.white),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
           ),
         ],
       ),

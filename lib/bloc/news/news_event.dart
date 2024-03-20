@@ -22,3 +22,21 @@ class FetchMoreNewsByCategory extends NewsEvent {
 }
 
 class FetchMoreNews extends NewsEvent {}
+
+class FetchRecommendedNews extends NewsEvent {
+  final String email;
+
+  const FetchRecommendedNews(this.email);
+}
+
+class ResetCurrentPage extends NewsEvent {}
+
+class UpdateUserBehavior extends NewsEvent {
+  final String email;
+  final String category;
+  final String duration;
+  final String news_id;
+
+  const UpdateUserBehavior(
+      this.email, this.category, this.duration, this.news_id);
+}

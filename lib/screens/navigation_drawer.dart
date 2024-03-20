@@ -8,6 +8,7 @@ import 'package:newsbyte/bloc/theme/theme_bloc.dart';
 import 'package:newsbyte/bloc/theme/theme_event.dart';
 import 'package:newsbyte/constants.dart';
 import 'package:newsbyte/screens/authentication.dart';
+import 'package:newsbyte/utils/shared_prefs.dart';
 
 class People extends StatelessWidget {
   const People({Key? key}) : super(key: key);
@@ -108,6 +109,7 @@ class NavDrawer extends StatelessWidget {
                       leading: const Icon(Icons.logout, size: 30),
                       title: const Text("Logout"),
                       onTap: () {
+                        PreferenceUtils.remove('user');
                         BlocProvider.of<AuthBloc>(context)
                             .add(AuthLogoutRequested());
                       },

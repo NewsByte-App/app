@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -25,6 +26,7 @@ class ImageContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     // Check if the image URL is for an SVG.
     bool isSvg = imageUrl.toLowerCase().endsWith('.svg');
+    bool isImage = imageUrl.isEmpty;
 
     return Container(
       height: height,
@@ -37,7 +39,11 @@ class ImageContainer extends StatelessWidget {
         image: isSvg
             ? null
             : DecorationImage(
-                image: NetworkImage(imageUrl),
+                image: isImage
+                    ? const AssetImage('assets/icon.png')
+                    : CachedNetworkImageProvider(
+                        imageUrl,
+                      ) as ImageProvider<Object>,
                 fit: BoxFit.cover,
               ),
       ),

@@ -5,9 +5,9 @@ final ThemeData lightMode = ThemeData(
   useMaterial3: true,
   fontFamily: 'Poppins',
   brightness: Brightness.light,
-  primaryColor: Colors.redAccent.shade100,
   scaffoldBackgroundColor: Colors.white,
-  cardColor: Colors.grey.withAlpha(150),
+  primaryColor: Colors.black,
+  cardColor: Colors.grey.withAlpha(350),
   textTheme: TextTheme(
     headlineLarge: const TextStyle().copyWith(
         fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black),
@@ -76,7 +76,7 @@ final ThemeData darkMode = ThemeData(
   useMaterial3: true,
   fontFamily: 'Poppins',
   brightness: Brightness.dark,
-  primaryColor: Colors.redAccent.shade100,
+  primaryColor: Colors.white,
   scaffoldBackgroundColor: Colors.black,
   cardColor: Colors.grey.withAlpha(150),
   textTheme: TextTheme(

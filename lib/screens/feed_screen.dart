@@ -6,6 +6,7 @@ import 'package:newsbyte/models/article_model.dart';
 import 'package:newsbyte/models/news_model.dart';
 import 'package:newsbyte/screens/article_screen.dart';
 import 'package:newsbyte/screens/home_screen.dart';
+import 'package:newsbyte/utils/shared_prefs.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -18,6 +19,9 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   late final NewsBloc _newsBloc;
   int _index = 0;
+  final Map<int, DateTime> _pageVisibleStartTime = {};
+  final Map<int, Duration> _pageLifespan = {};
+  final String user = PreferenceUtils.getString('user');
 
   @override
   void initState() {
@@ -52,13 +56,26 @@ class _FeedScreenState extends State<FeedScreen> {
                   loop: false,
                   index: _index,
                   onPageChanged: (index) {
+                    if (_pageVisibleStartTime.containsKey(_index)) {
+                      final endTime = DateTime.now();
+                      final startTime = _pageVisibleStartTime[_index]!;
+                      final lifespan = endTime.difference(startTime);
+                      _pageLifespan[_index] = lifespan;
+                      BlocProvider.of<NewsBloc>(context).add(UpdateUserBehavior(
+                        user,
+                        state.news[index!].category,
+                        lifespan.toString(),
+                        state.news[index].id,
+                      ));
+                    }
+                    _pageVisibleStartTime[index!] = DateTime.now();
                     setState(() {
-                      _index = index!;
+                      _index = index;
                     });
-                    const preloadThreshold = 3;
+                    const preloadThreshold = 1;
                     if (_index >= state.news.length - preloadThreshold &&
                         state is! NewsLoading) {
-                      _newsBloc.add(FetchMoreNews());
+                      _newsBloc.add(FetchRecommendedNews(user));
                     }
                   },
                   scrollDirection: Axis.vertical,

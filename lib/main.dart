@@ -11,10 +11,13 @@ import 'package:newsbyte/screens/feed_screen.dart';
 import 'package:newsbyte/screens/home_screen.dart';
 import 'package:newsbyte/screens/home_screen.dart';
 import 'package:newsbyte/screens/splash_screen.dart';
+import 'package:newsbyte/utils/shared_prefs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await PreferenceUtils.init();
   await Supabase.initialize(
     url: 'https://qnxpcuuueqqslgitjyzr.supabase.co',
     anonKey:

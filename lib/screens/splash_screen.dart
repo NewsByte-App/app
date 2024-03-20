@@ -18,11 +18,11 @@ class SplashScreen extends StatelessWidget {
           animatedTexts: [
             TyperAnimatedText(
               'NewsByte.',
-              textStyle: GoogleFonts.playfairDisplay(
-                fontStyle: FontStyle.italic,
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold,
-              ),
+              textStyle: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    fontWeight: FontWeight.w800,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 40,
+                  ),
               speed: const Duration(milliseconds: 100),
             ),
           ],

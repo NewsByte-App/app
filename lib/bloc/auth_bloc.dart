@@ -3,9 +3,13 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:newsbyte/utils/shared_prefs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:newsbyte/constants.dart';
 import 'package:newsbyte/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -16,7 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthUserAuthenicated>(((event, emit) async {
       try {
         emit(AuthLoading());
-        print("Authenticated");
+        PreferenceUtils.setString('user', event.email);
         emit(AuthSuccess(email: event.email));
       } catch (e) {
         emit(AuthFailure(message: e.toString()));
@@ -59,11 +63,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
         _createUser(googleEmail, event.loginType);
       } else {
-        await supabase.auth.signInWithOtp(
-          email: event.email,
-          emailRedirectTo:
-              kIsWeb ? null : 'io.supabase.newsbyte://login-callback/',
+        final rawNonce = supabase.auth.generateRawNonce();
+
+        final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+
+        final credential = await SignInWithApple.getAppleIDCredential(
+          scopes: [
+            AppleIDAuthorizationScopes.email,
+            AppleIDAuthorizationScopes.fullName,
+          ],
+          nonce: hashedNonce,
         );
+        final idToken = credential.identityToken;
+        if (idToken == null) {
+          throw const AuthException(
+              'Could not find ID Token from generated credential.');
+        }
+        final AuthResponse res = await supabase.auth.signInWithIdToken(
+          provider: OAuthProvider.apple,
+          idToken: idToken,
+          nonce: rawNonce,
+        );
+        _createUser(res.user!.email.toString(), event.loginType);
       }
     } on AuthException catch (error) {
       emit(AuthFailure(message: error.toString()));

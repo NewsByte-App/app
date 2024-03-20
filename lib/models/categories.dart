@@ -1,5 +1,4 @@
 enum NewsCategories {
-  top,
   general,
   business,
   sports,
