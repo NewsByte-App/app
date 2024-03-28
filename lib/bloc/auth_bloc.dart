@@ -87,9 +87,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _createUser(res.user!.email.toString(), event.loginType);
       }
     } on AuthException catch (error) {
-      emit(AuthFailure(message: error.toString()));
+      emit(AuthFailure(message: "Something Went Wrong!"));
     } catch (error) {
-      emit(AuthFailure(message: error.toString()));
+      emit(AuthFailure(message: "Something Went Wrong!"));
     }
   }
 

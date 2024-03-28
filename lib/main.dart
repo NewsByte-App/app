@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Flutter Demo',
             theme: themState,
+            debugShowCheckedModeBanner: false,
             initialRoute: '/',
             routes: {
               '/': (context) => const SplashScreen(),

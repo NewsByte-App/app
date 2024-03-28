@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:newsbyte/models/news_model.dart';
 import 'package:newsbyte/widgets/custom_tag.dart';
 import 'package:newsbyte/widgets.dart/image_container.dart';
+import 'package:stroke_text/stroke_text.dart';
 
 class ArticleScreen extends StatelessWidget {
   final NewsModel news;
   final bool scrollablePhysics;
-  const ArticleScreen(
-      {Key? key, required this.news, required this.scrollablePhysics})
-      : super(key: key);
+  final double height;
+  const ArticleScreen({
+    Key? key,
+    required this.news,
+    required this.scrollablePhysics,
+    required this.height,
+  }) : super(key: key);
 
   static const routeName = '/article';
   @override
@@ -29,7 +34,8 @@ class ArticleScreen extends StatelessWidget {
               ? const ScrollPhysics()
               : const NeverScrollableScrollPhysics(),
           slivers: <Widget>[
-            SliverToBoxAdapter(child: _NewsHeadline(article: news)),
+            SliverToBoxAdapter(
+                child: _NewsHeadline(article: news, height: height)),
             SliverFillRemaining(
               hasScrollBody: false, // Set to false to fill the remaining space
               child: _NewsBody(article: news),
@@ -99,7 +105,7 @@ class _NewsBody extends StatelessWidget {
           const SizedBox(height: 20),
           Center(
             child: Text(
-              article.summary,
+              (article.summary).trim(),
               style: Theme.of(context).textTheme.displaySmall,
             ),
           ),
@@ -113,9 +119,11 @@ class _NewsHeadline extends StatelessWidget {
   const _NewsHeadline({
     Key? key,
     required this.article,
+    required this.height,
   }) : super(key: key);
 
   final NewsModel article;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +134,7 @@ class _NewsHeadline extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.15,
+            height: MediaQuery.of(context).size.height * height,
           ),
           CustomTag(
             backgroundColor: Colors.grey.withAlpha(150),
@@ -140,22 +148,16 @@ class _NewsHeadline extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(
-            article.title,
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  height: 1.25,
-                ),
-          ),
+          StrokeText(
+              strokeWidth: 4,
+              text: article.title,
+              textStyle:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
           const SizedBox(height: 10),
-          Text(
-            article.description,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
-          ),
+          StrokeText(
+              text: article.description,
+              textStyle:
+                  const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
         ],
       ),
     );

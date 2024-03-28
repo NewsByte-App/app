@@ -6,7 +6,7 @@ import 'package:newsbyte/models/user_behavior.dart';
 
 class ApiProvider {
   final Dio _dio = Dio();
-  late String backendUrl = 'http://localhost:8000';
+  late String backendUrl = 'http://20.241.155.32';
 
   // In ApiProvider
   Future<List<NewsModel>?> fetchNews(String? category, int page) async {

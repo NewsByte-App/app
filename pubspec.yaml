@@ -55,6 +55,7 @@ dependencies:
   equatable: ^2.0.5
   crypto: ^3.0.3
   email_validator: ^2.1.17
+  stroke_text: ^0.0.2
 
 dev_dependencies:
   flutter_test:

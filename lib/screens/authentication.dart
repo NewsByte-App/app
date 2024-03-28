@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                   Text('Welcome To',
                       style: Theme.of(context).textTheme.titleLarge),
                   Text(
-                    'NewsByte.',
+                    'NewsBites.',
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                           fontWeight: FontWeight.w800,
                           fontSize: 40,

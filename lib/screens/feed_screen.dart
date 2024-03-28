@@ -80,9 +80,10 @@ class _FeedScreenState extends State<FeedScreen> {
                   },
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
-                    // Directly use state.news[index] here
                     return ArticleScreen(
-                        news: state.news[index], scrollablePhysics: false);
+                        news: state.news[index],
+                        scrollablePhysics: false,
+                        height: 0.05);
                   },
                   itemCount: state.news.length);
             } else if (state is NewsError) {

@@ -17,7 +17,7 @@ class SplashScreen extends StatelessWidget {
         child: AnimatedTextKit(
           animatedTexts: [
             TyperAnimatedText(
-              'NewsByte.',
+              'NewsBites.',
               textStyle: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     fontWeight: FontWeight.w800,
                     fontStyle: FontStyle.italic,

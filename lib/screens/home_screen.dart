@@ -171,6 +171,7 @@ class _CategoryNewsState extends State<_CategoryNews>
                                 builder: (context) => ArticleScreen(
                                   news: state.news[index],
                                   scrollablePhysics: true,
+                                  height: 0.15,
                                 ),
                               ),
                             );
@@ -250,7 +251,7 @@ class _DiscoverNews extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'NewsByte.',
+            'NewsBites.',
             style: Theme.of(context)
                 .textTheme
                 .headline4!
