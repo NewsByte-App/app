@@ -1,7 +1,7 @@
-import 'package:newsbyte/bloc/news/news_bloc.dart';
-import 'package:newsbyte/models/news_model.dart';
-import 'package:newsbyte/models/user_behavior.dart';
-import 'package:newsbyte/utils/api_provider.dart';
+import 'package:newsbites/bloc/news/news_bloc.dart';
+import 'package:newsbites/models/news_model.dart';
+import 'package:newsbites/models/user_behavior.dart';
+import 'package:newsbites/utils/api_provider.dart';
 
 class ApiRepository {
   final _provider = ApiProvider();

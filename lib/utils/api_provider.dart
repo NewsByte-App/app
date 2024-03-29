@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:newsbyte/constants.dart';
-import 'package:newsbyte/models/article_model.dart';
-import 'package:newsbyte/models/news_model.dart';
-import 'package:newsbyte/models/user_behavior.dart';
+import 'package:newsbites/constants.dart';
+import 'package:newsbites/models/article_model.dart';
+import 'package:newsbites/models/news_model.dart';
+import 'package:newsbites/models/user_behavior.dart';
 
 class ApiProvider {
   final Dio _dio = Dio();
-  late String backendUrl = '20.241.151.227';
+  late String backendUrl = 'http://20.241.151.227';
 
   // In ApiProvider
   Future<List<NewsModel>?> fetchNews(String? category, int page) async {

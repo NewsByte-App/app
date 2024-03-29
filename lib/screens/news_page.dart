@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:newsbyte/screens/navigation_drawer.dart';
-import 'package:newsbyte/widgets/news_view.dart';
+import 'package:newsbites/screens/navigation_drawer.dart';
+import 'package:newsbites/widgets/news_view.dart';
 
 import 'package:provider/provider.dart';
 

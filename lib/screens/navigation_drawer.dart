@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newsbyte/bloc/auth_bloc.dart';
-import 'package:newsbyte/bloc/theme/theme.dart';
-import 'package:newsbyte/bloc/theme/theme_bloc.dart';
-import 'package:newsbyte/bloc/theme/theme_event.dart';
-import 'package:newsbyte/constants.dart';
-import 'package:newsbyte/screens/authentication.dart';
-import 'package:newsbyte/utils/shared_prefs.dart';
+import 'package:newsbites/bloc/auth_bloc.dart';
+import 'package:newsbites/bloc/theme/theme.dart';
+import 'package:newsbites/bloc/theme/theme_bloc.dart';
+import 'package:newsbites/bloc/theme/theme_event.dart';
+import 'package:newsbites/constants.dart';
+import 'package:newsbites/screens/authentication.dart';
+import 'package:newsbites/utils/shared_prefs.dart';
 
 class People extends StatelessWidget {
   const People({Key? key}) : super(key: key);

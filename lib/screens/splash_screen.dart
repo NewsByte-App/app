@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newsbyte/bloc/auth_bloc.dart';
-import 'package:newsbyte/screens/authentication.dart';
-import 'package:newsbyte/screens/home_screen.dart';
+import 'package:newsbites/bloc/auth_bloc.dart';
+import 'package:newsbites/screens/authentication.dart';
+import 'package:newsbites/screens/home_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   static String routeName = "/";

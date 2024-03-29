@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:newsbyte/constants.dart';
+import 'package:newsbites/constants.dart';
 
 class UserModel {
   final String email;

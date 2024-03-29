@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:newsbyte/models/category_data.dart';
-import 'package:newsbyte/utils/utils.dart';
+import 'package:newsbites/models/category_data.dart';
+import 'package:newsbites/utils/utils.dart';
 
 class NewsView extends StatefulWidget {
   final Datum news;

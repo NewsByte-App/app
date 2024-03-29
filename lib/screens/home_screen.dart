@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newsbyte/bloc/news/news_bloc.dart';
-import 'package:newsbyte/models/categories.dart';
-import 'package:newsbyte/screens/article_screen.dart';
-import 'package:newsbyte/screens/feed_screen.dart';
-import 'package:newsbyte/screens/navigation_drawer.dart';
-import 'package:newsbyte/widgets.dart/image_container.dart';
+import 'package:newsbites/bloc/news/news_bloc.dart';
+import 'package:newsbites/models/categories.dart';
+import 'package:newsbites/screens/article_screen.dart';
+import 'package:newsbites/screens/feed_screen.dart';
+import 'package:newsbites/screens/navigation_drawer.dart';
+import 'package:newsbites/widgets.dart/image_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

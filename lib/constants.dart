@@ -1,4 +1,4 @@
-const String backendUrl = "http://20.241.155.32";
+const String backendUrl = "http://20.241.151.227";
 
 const String email = 'email';
 const String google = 'google';

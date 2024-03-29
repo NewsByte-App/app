@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:newsbyte/bloc/news/api_repository.dart';
-import 'package:newsbyte/models/news_model.dart';
-import 'package:newsbyte/models/user_behavior.dart';
+import 'package:newsbites/models/news_model.dart';
+import 'package:newsbites/bloc/news/api_repository.dart';
+import 'package:newsbites/models/news_model.dart';
+import 'package:newsbites/models/user_behavior.dart';
 
 part 'news_event.dart';
 part 'news_state.dart';

@@ -1,12 +1,12 @@
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newsbyte/bloc/news/news_bloc.dart';
-import 'package:newsbyte/models/article_model.dart';
-import 'package:newsbyte/models/news_model.dart';
-import 'package:newsbyte/screens/article_screen.dart';
-import 'package:newsbyte/screens/home_screen.dart';
-import 'package:newsbyte/utils/shared_prefs.dart';
+import 'package:newsbites/bloc/news/news_bloc.dart';
+import 'package:newsbites/models/article_model.dart';
+import 'package:newsbites/models/news_model.dart';
+import 'package:newsbites/screens/article_screen.dart';
+import 'package:newsbites/screens/home_screen.dart';
+import 'package:newsbites/utils/shared_prefs.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});

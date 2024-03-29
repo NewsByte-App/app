@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:newsbyte/bloc/theme/theme.dart';
-import 'package:newsbyte/bloc/theme/theme_event.dart';
+import 'package:newsbites/bloc/theme/theme.dart';
+import 'package:newsbites/bloc/theme/theme_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeBloc extends Bloc<ThemeSwitcherEvent, ThemeData> {

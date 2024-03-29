@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:newsbyte/models/news_model.dart';
-import 'package:newsbyte/widgets/custom_tag.dart';
-import 'package:newsbyte/widgets.dart/image_container.dart';
+import 'package:newsbites/models/news_model.dart';
+import 'package:newsbites/widgets/custom_tag.dart';
+import 'package:newsbites/widgets.dart/image_container.dart';
 import 'package:stroke_text/stroke_text.dart';
 
 class ArticleScreen extends StatelessWidget {
